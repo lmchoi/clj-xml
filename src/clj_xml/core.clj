@@ -4,17 +4,18 @@
             [clojure.zip :as zip])
   (:import (javax.xml.parsers SAXParserFactory)))
 
-(defn get-all [xml-zipper k]
+(defn get-all-content [xml-zipper tag]
   (->> xml-zipper
-       (filter #(= (:tag %) k))
+       (filter #(= (:tag %) tag))
        (map :content)
        (flatten)))
 
-(defn get-in [xml-zipper ks]
-  (first (reduce get-all
+(defn get-content-in [xml-zipper ks]
+  (first (reduce get-all-content
                  xml-zipper
                  ks)))
 
+(declare newSAXParser parse)
 (defn- non-validating [s ch]
   (..
     (doto
